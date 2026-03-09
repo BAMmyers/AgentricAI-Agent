@@ -1,0 +1,25 @@
+﻿from datetime import datetime
+import logging
+
+
+class AgentricAILogger:
+    def __init__(self):
+        self.logger = logging.getLogger('AgentricAILogger')
+        self.logger.setLevel(logging.INFO)
+        
+        # Create file handler which logs even debug messages
+        fh = logging.FileHandler('/usr/local/agentricai/logs/core.log')
+        fh.setLevel(logging.DEBUG)
+        
+        # Create formatter and add it to the handlers
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        fh.setFormatter(formatter)
+        
+        self.logger.addHandler(fh)
+    
+    def log(self, message):
+        self.logger.info(message)
+
+# Usage example
+logger = AgentricAILogger()
+logger.log("Core package initialized successfully.")

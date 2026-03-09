@@ -1,0 +1,26 @@
+import requests
+
+def fetch_weather(location):
+    url = f"https://wttr.in/{location}?format=3"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.text
+    else:
+        return "Failed to retrieve weather data"
+
+def get_weather_icon_url(weather_data):
+    import json
+    data = json.loads(weather_data)
+    icon_url = data['current_condition'][0]['weatherIconUrl'][0]['value']
+    return icon_url
+
+def format_weather_output(location, weather_data):
+    icon_url = get_weather_icon_url(weather_data)
+    formatted_output = f"{location}: {weather_data.strip()} - Icon: {icon_url}"
+    return formatted_output
+
+# Example usage
+location = "Oregon"
+weather_data = fetch_weather(location)
+formatted_output = format_weather_output(location, weather_data)
+print(formatted_output)

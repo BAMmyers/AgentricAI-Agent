@@ -1,0 +1,117 @@
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.responses import StreamingResponse
+import asyncio
+
+from agentricai.core.agent_loader import AgentLoader
+from agentricai.core.tool_loader import ToolLoader
+from agentricai.core.memory_router import MemoryRouter
+from agentricai.core.conversation_engine import ConversationEngine
+from agentricai.core.environment import get_local_models
+
+app = FastAPI()
+
+agent_loader = AgentLoader()
+tool_loader = ToolLoader()
+memory_router = MemoryRouter()
+conversation_engine = ConversationEngine(agent_loader, tool_loader, memory_router)
+
+
+async def sse_stream(generator):
+    async for chunk in generator:
+        yield f"data: {chunk}\n\n"
+
+
+@app.post("/api/chat")
+async def chat(request: Request):
+    data = await request.json()
+
+    agent_id = data.get("agent_id")
+    text = data.get("text")
+    resource = data.get("resource")
+    thread = data.get("thread")
+
+    if not agent_id or not text or not resource or not thread:
+        raise HTTPException(status_code=400, detail="Missing required parameters")
+
+    agent = agent_loader.get_agent(agent_id)
+    if agent is None:
+        raise HTTPException(status_code=404, detail="Agent not found")
+
+    memory_context = memory_router.read_memory(resource, thread)
+
+    generator = conversation_engine.stream_response(
+        agent_id=agent_id,
+        text=text,
+        resource=resource,
+        thread=thread,
+        memory_context=memory_context
+    )
+
+    return StreamingResponse(sse_stream(generator), media_type="text/event-stream")
+
+
+@app.get("/api/agents")
+async def get_agents():
+    return {"agents": agent_loader.list_agents()}
+
+
+@app.post("/api/agents/create")
+async def create_agent(request: Request):
+    data = await request.json()
+    try:
+        agent_id = agent_loader.create_agent(data)
+        return {"agent_id": agent_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/tools")
+async def get_tools():
+    return {"tools": tool_loader.list_tools()}
+
+
+@app.post("/api/tools/execute")
+async def execute_tool(request: Request):
+    data = await request.json()
+    tool_id = data.get("tool_id")
+    parameters = data.get("parameters")
+
+    if not tool_id:
+        raise HTTPException(status_code=400, detail="Missing tool_id")
+
+    try:
+        result = tool_loader.execute_tool(tool_id, parameters)
+        return {"result": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/memory/read")
+async def read_memory(request: Request):
+    data = await request.json()
+    resource = data.get("resource")
+    thread = data.get("thread")
+
+    if not resource or not thread:
+        raise HTTPException(status_code=400, detail="Missing parameters")
+
+    return {"memory": memory_router.read_memory(resource, thread)}
+
+
+@app.post("/api/memory/write")
+async def write_memory(request: Request):
+    data = await request.json()
+    resource = data.get("resource")
+    thread = data.get("thread")
+    content = data.get("content")
+
+    if not resource or not thread or not content:
+        raise HTTPException(status_code=400, detail="Missing parameters")
+
+    memory_router.write_memory(resource, thread, content)
+    return {"status": "success"}
+
+
+@app.get("/api/models")
+async def get_models():
+    return {"models": get_local_models()}

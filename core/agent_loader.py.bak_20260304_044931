@@ -1,0 +1,68 @@
+import os
+import sys
+import inspect
+from importlib.util import spec_from_file_location, module_from_spec
+
+class AgentLoader:
+    def __init__(self):
+        self.agents = {}
+        self.load_agents()
+
+    def load_agents(self, directory="core/agents"):
+        for root, _, files in os.walk(directory):
+            for file in files:
+                if file.endswith(".py") and not file.startswith("__"):
+                    module_path = os.path.join(root, file)
+                    module_name = module_path.replace("/", ".").replace("\\", ".")
+                    spec = spec_from_file_location(module_name, module_path)
+                    module = module_from_spec(spec)
+                    sys.modules[module_name] = module
+                    spec.loader.exec_module(module)
+
+                    for attr in dir(module):
+                        obj = getattr(module, attr)
+                        if inspect.isclass(obj) and hasattr(obj, "id") and hasattr(obj, "name"):
+                            instance = obj()
+                            self.agents[instance.id] = instance
+
+    def list_agents(self):
+        return [
+            {
+                "id": agent.id,
+                "name": agent.name,
+                "model": getattr(agent, "model", None),
+                "memory_config": getattr(agent, "memory_config", None)
+            }
+            for agent in self.agents.values()
+        ]
+
+    def get_agent(self, agent_id):
+        if agent_id in self.agents:
+            return self.agents[agent_id]
+        raise ValueError(f"Agent with id {agent_id} not found")
+
+    def create_agent(self, config):
+        agent_class = config.get("class")
+        if not agent_class:
+            raise ValueError("Missing agent class")
+
+        module_path = config.get("module")
+        if not module_path:
+            raise ValueError("Missing module path")
+
+        spec = spec_from_file_location(module_path, module_path)
+        module = module_from_spec(spec)
+        sys.modules[module_path] = module
+        spec.loader.exec_module(module)
+
+        cls = getattr(module, agent_class)
+        instance = cls()
+
+        self.agents[instance.id] = instance
+        return instance.id
+
+    def delete_agent(self, agent_id):
+        if agent_id in self.agents:
+            del self.agents[agent_id]
+            return True
+        raise ValueError(f"Agent with id {agent_id} not found")

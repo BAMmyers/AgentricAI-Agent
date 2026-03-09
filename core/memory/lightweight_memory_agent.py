@@ -1,0 +1,56 @@
+import sqlite3
+
+
+class Memory:
+    def __init__(self, db_path='memory.db'):
+        self.conn = sqlite3.connect(db_path)
+        self.cursor = self.conn.cursor()
+        self.setup_table()
+
+    def setup_table(self):
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                resource TEXT NOT NULL,
+                thread TEXT NOT NULL,
+                message TEXT NOT NULL,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        self.conn.commit()
+
+    def save_message(self, resource, thread, message):
+        self.cursor.execute('''
+            INSERT INTO messages (resource, thread, message)
+            VALUES (?, ?, ?)
+        ''', (resource, thread, message))
+        self.conn.commit()
+
+    def get_messages(self, resource, thread):
+        self.cursor.execute('''
+            SELECT message FROM messages
+            WHERE resource = ? AND thread = ?
+            ORDER BY timestamp ASC
+        ''', (resource, thread))
+        return [row[0] for row in self.cursor.fetchall()]
+
+
+class Agent:
+    def __init__(self, memory):
+        self.memory = memory
+
+    async def generate(self, message, resource=None, thread=None):
+        if resource is None or thread is None:
+            raise ValueError("Resource and thread must be provided")
+
+        # Save the message to memory
+        self.memory.save_message(resource, thread, message)
+
+        # Retrieve all messages for the given resource and thread
+        messages = self.memory.get_messages(resource, thread)
+        context = '\n'.join(messages)
+
+        # Generate a response based on the context
+        response = f"Context: {context}\n\nResponse: Your favorite color is blue."
+
+        return response

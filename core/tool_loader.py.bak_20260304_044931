@@ -1,0 +1,70 @@
+import json
+import os
+import subprocess
+
+class ToolLoader:
+    def __init__(self):
+        self.tools = {}
+        self.load_tools()
+
+    def load_tools(self, catalog_path="MCP_Catalog.json", tools_dir="C:\\Program Files\\AgentricAI\\Tools"):
+        if not os.path.isfile(catalog_path):
+            return
+
+        with open(catalog_path, "r") as f:
+            catalog = json.load(f)
+
+        for tool in catalog.get("tools", []):
+            tool_id = tool.get("id")
+            tool_name = tool.get("name")
+            binary = tool.get("binary")
+
+            if not tool_id or not binary:
+                continue
+
+            tool_path = os.path.join(tools_dir, binary)
+
+            if os.path.isfile(tool_path):
+                self.tools[tool_id] = {
+                    "id": tool_id,
+                    "name": tool_name,
+                    "path": tool_path
+                }
+
+    def list_tools(self):
+        return list(self.tools.values())
+
+    def execute_tool(self, tool_id, parameters):
+        if tool_id not in self.tools:
+            raise ValueError(f"Tool with id {tool_id} not found")
+
+        tool_info = self.tools[tool_id]
+        cmd = [tool_info["path"]]
+
+        if isinstance(parameters, list):
+            cmd.extend(parameters)
+        elif isinstance(parameters, dict):
+            for k, v in parameters.items():
+                cmd.append(str(k))
+                cmd.append(str(v))
+        elif parameters is not None:
+            cmd.append(str(parameters))
+
+        try:
+            result = subprocess.run(
+                cmd,
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            return {
+                "stdout": result.stdout,
+                "stderr": result.stderr,
+                "returncode": result.returncode
+            }
+        except subprocess.CalledProcessError as e:
+            return {
+                "stdout": e.stdout,
+                "stderr": e.stderr,
+                "returncode": e.returncode
+            }

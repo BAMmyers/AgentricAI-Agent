@@ -1,0 +1,34 @@
+import platform
+import psutil
+import GPUtil
+
+def get_gpu_info():
+    gpus = GPUtil.getGPUs()
+    return {
+        "vendor": gpus[0].vendor,
+        "model": gpus[0].name,
+        "core_count": gpus[0].cores,
+        "memory_size": int(gpus[0].total / 1024**3)  # in GB
+    }
+
+def get_cpu_info():
+    return {
+        "model": platform.processor(),
+        "cores": psutil.cpu_count(logical=False),
+        "threads": psutil.cpu_count(logical=True)
+    }
+
+def get_memory_size():
+    memory = psutil.virtual_memory()
+    return int(memory.total / 1024**3)  # in GB
+
+def get_storage_info():
+    storage = psutil.disk_partitions()
+    total_space = sum(part.total for part in storage) / (1024**3)  # in GB
+    used_space = sum(part.used for part in storage) / (1024**3)  # in GB
+    free_space = total_space - used_space  # in GB
+    return {
+        "total_space": int(total_space),
+        "used_space": int(used_space),
+        "free_space": int(free_space)
+    }

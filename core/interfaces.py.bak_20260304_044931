@@ -1,0 +1,25 @@
+from abc import ABC, abstractmethod
+
+class Domain(ABC):
+    @abstractmethod
+    def execute(self, command: str) -> None:
+        pass
+
+class RegistryDB(ABC):
+    @abstractmethod
+    def register(self, key: str, value: any) -> None:
+        pass
+
+    @abstractmethod
+    def retrieve(self, key: str) -> any:
+        pass
+
+class Harness(ABC):
+    @abstractmethod
+    def run(self) -> None:
+        pass
+
+class MCP_Catalog(ABC):
+    @abstractmethod
+    def load_catalog(self) -> None:
+        pass

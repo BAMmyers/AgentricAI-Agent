@@ -1,0 +1,10 @@
+import asyncio
+
+class AgentricAIEventLoop:
+    def __init__(self, domain: Domain, registry_db: RegistryDB, harness: Harness):
+        self.domain = domain
+        self.registry_db = registry_db
+        self.harness = harness
+    
+    async def run(self):
+        await self.harness.run()

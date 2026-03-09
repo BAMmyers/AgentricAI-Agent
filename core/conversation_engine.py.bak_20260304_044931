@@ -1,0 +1,35 @@
+import asyncio
+
+class ConversationEngine:
+    def __init__(self, agent_loader, tool_loader, memory_router):
+        self.agent_loader = agent_loader
+        self.tool_loader = tool_loader
+        self.memory_router = memory_router
+
+    async def generate_response(self, agent_id, text, resource, thread, memory_context):
+        agent = self.agent_loader.get_agent(agent_id)
+        return agent.generate_response(
+            text=text,
+            memory_context=memory_context,
+            resource=resource,
+            thread=thread,
+            tool_loader=self.tool_loader
+        )
+
+    async def stream_response(self, agent_id, text, resource, thread, memory_context):
+        agent = self.agent_loader.get_agent(agent_id)
+
+        async for chunk in agent.stream_response(
+            text=text,
+            memory_context=memory_context,
+            resource=resource,
+            thread=thread,
+            tool_loader=self.tool_loader
+        ):
+            yield chunk
+
+        self.memory_router.write_memory(
+            resource_id=resource,
+            thread_id=thread,
+            message=text
+        )

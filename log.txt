@@ -1,0 +1,75 @@
+
+================================================================================
+AGENTRICAI LAUNCH LOG
+================================================================================
+Generated: 2026-03-08 23:58:12
+Root Directory: C:\Program Files\AgentricAI
+Python Version: 3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]
+Python Executable: C:\Program Files\Python314\python.exe
+Platform: win32
+Working Directory: C:\Program Files\AgentricAI
+================================================================================
+
+[23:58:12.289] [+0.001s] [IMPORT] [INFO] Importing core subsystems...
+[23:58:12.309] [+0.020s] [ERROR] [ERROR] Import FAILED: core.main - No module named 'opentelemetry'
+[23:58:12.311] [+0.022s] [ERROR] [ERROR] Failed to import CoreSystem
+[23:58:12.311] [+0.022s] [ERROR_DETAIL] [ERROR] Exception: No module named 'opentelemetry'
+[23:58:12.311] [+0.023s] [TRACEBACK] [ERROR]   Traceback (most recent call last):
+[23:58:12.314] [+0.025s] [TRACEBACK] [ERROR]     File "C:\Program Files\AgentricAI\main.py", line 26, in <module>
+[23:58:12.315] [+0.026s] [TRACEBACK] [ERROR]       from core.main import CoreSystem
+[23:58:12.315] [+0.026s] [TRACEBACK] [ERROR]     File "C:\Program Files\AgentricAI\core\__init__.py", line 21, in <module>
+[23:58:12.315] [+0.027s] [TRACEBACK] [ERROR]       from core.conversation_engine import ConversationEngine
+[23:58:12.315] [+0.027s] [TRACEBACK] [ERROR]     File "C:\Program Files\AgentricAI\core\conversation_engine.py", line 7, in <module>
+[23:58:12.316] [+0.027s] [TRACEBACK] [ERROR]       from core.tracing import get_tracer
+[23:58:12.316] [+0.027s] [TRACEBACK] [ERROR]     File "C:\Program Files\AgentricAI\core\tracing.py", line 4, in <module>
+[23:58:12.316] [+0.028s] [TRACEBACK] [ERROR]       from opentelemetry import trace
+[23:58:12.317] [+0.028s] [TRACEBACK] [ERROR]   ModuleNotFoundError: No module named 'opentelemetry'
+[23:58:12.971] [+0.682s] [ERROR] [ERROR] Import FAILED: api.main - cannot import name 'GZIPMiddleware' from 'fastapi.middleware.gzip' (C:\Users\assis\AppData\Roaming\Python\Python314\site-packages\fastapi\middleware\gzip.py)
+[23:58:12.973] [+0.684s] [ERROR] [ERROR] Failed to import init_api
+[23:58:12.973] [+0.684s] [ERROR_DETAIL] [ERROR] Exception: cannot import name 'GZIPMiddleware' from 'fastapi.middleware.gzip' (C:\Users\assis\AppData\Roaming\Python\Python314\site-packages\fastapi\middleware\gzip.py)
+[23:58:12.973] [+0.684s] [TRACEBACK] [ERROR]   Traceback (most recent call last):
+[23:58:12.973] [+0.684s] [TRACEBACK] [ERROR]     File "C:\Program Files\AgentricAI\main.py", line 33, in <module>
+[23:58:12.973] [+0.685s] [TRACEBACK] [ERROR]       from api.main import init_api
+[23:58:12.973] [+0.685s] [TRACEBACK] [ERROR]     File "C:\Program Files\AgentricAI\api\main.py", line 9, in <module>
+[23:58:12.974] [+0.685s] [TRACEBACK] [ERROR]       from api.gateway import app, init_api
+[23:58:12.974] [+0.685s] [TRACEBACK] [ERROR]     File "C:\Program Files\AgentricAI\api\gateway.py", line 8, in <module>
+[23:58:12.974] [+0.685s] [TRACEBACK] [ERROR]       from fastapi.middleware.gzip import GZIPMiddleware
+[23:58:12.974] [+0.686s] [TRACEBACK] [ERROR]   ImportError: cannot import name 'GZIPMiddleware' from 'fastapi.middleware.gzip' (C:\Users\assis\AppData\Roaming\Python\Python314\site-packages\fastapi\middleware\gzip.py). Did you mean: 'middleware'?
+[23:58:12.975] [+0.686s] [PACKAGE_SCAN] [INFO] Scanning installed packages...
+[23:58:12.975] [+0.686s] [PACKAGE] [DEBUG] Package found: fastapi (0.129.0)
+[23:58:13.148] [+0.860s] [PACKAGE] [DEBUG] Package found: uvicorn (0.40.0)
+[23:58:13.342] [+1.054s] [PACKAGE] [DEBUG] Package found: requests (2.32.5)
+[23:58:13.343] [+1.054s] [WARNING] [WARNING] Package missing: psutil
+[23:58:13.343] [+1.055s] [WARNING] [WARNING] Package missing: gputil
+[23:58:13.344] [+1.055s] [PACKAGE] [DEBUG] Package found: pydantic (2.12.5)
+[23:58:13.344] [+1.055s] [WARNING] [WARNING] Package missing: python-multipart
+[23:58:13.344] [+1.056s] [PACKAGE] [DEBUG] Package found: sqlite3 (built-in)
+[23:58:13.344] [+1.056s] [PACKAGE] [DEBUG] Package found: json (built-in)
+[23:58:13.345] [+1.056s] [PACKAGE] [DEBUG] Package found: asyncio (built-in)
+[23:58:13.345] [+1.056s] [IMPORT_TEST] [INFO] Testing critical imports...
+[23:58:13.345] [+1.056s] [IMPORT_OK] [DEBUG] Import OK: sys
+[23:58:13.345] [+1.056s] [IMPORT_OK] [DEBUG] Import OK: os
+[23:58:13.345] [+1.057s] [IMPORT_OK] [DEBUG] Import OK: pathlib
+[23:58:13.345] [+1.057s] [IMPORT_OK] [DEBUG] Import OK: json
+[23:58:13.346] [+1.057s] [IMPORT_OK] [DEBUG] Import OK: asyncio
+[23:58:13.346] [+1.057s] [IMPORT_OK] [DEBUG] Import OK: sqlite3
+[23:58:13.346] [+1.057s] [IMPORT_OK] [DEBUG] Import OK: fastapi
+[23:58:13.347] [+1.058s] [IMPORT_OK] [DEBUG] Import OK: uvicorn
+[23:58:13.347] [+1.058s] [IMPORT_OK] [DEBUG] Import OK: pydantic
+[23:58:13.347] [+1.059s] [IMPORT_OK] [DEBUG] Import OK: requests
+[23:58:13.348] [+1.059s] [ERROR] [ERROR] Import FAILED: psutil - No module named 'psutil'
+[23:58:13.348] [+1.059s] [INIT] [INFO] Orchestrator initialized
+[23:58:13.348] [+1.059s] [START] [INFO] Starting AgentricAI on 127.0.0.1:3939
+[23:58:13.348] [+1.060s] [OLLAMA] [INFO] Checking Ollama service...
+[23:58:13.371] [+1.082s] [OLLAMA_OK] [INFO] Ollama is running
+[23:58:13.372] [+1.083s] [SUBSYSTEM] [INFO] Initializing subsystems...
+[23:58:13.373] [+1.084s] [CORE] [INFO] Loading Core System...
+[23:58:13.373] [+1.085s] [ERROR] [ERROR] Failed to load Core System
+[23:58:13.374] [+1.085s] [ERROR_DETAIL] [ERROR] Exception: name 'CoreSystem' is not defined
+[23:58:13.374] [+1.085s] [TRACEBACK] [ERROR]   Traceback (most recent call last):
+[23:58:13.374] [+1.086s] [TRACEBACK] [ERROR]     File "C:\Program Files\AgentricAI\main.py", line 86, in init_subsystems
+[23:58:13.375] [+1.086s] [TRACEBACK] [ERROR]       self.core_system = CoreSystem()
+[23:58:13.375] [+1.086s] [TRACEBACK] [ERROR]                          ^^^^^^^^^^
+[23:58:13.375] [+1.086s] [TRACEBACK] [ERROR]   NameError: name 'CoreSystem' is not defined
+[23:58:13.375] [+1.087s] [INCOMPLETE] [WARN] INCOMPLETE: CoreSystem - name 'CoreSystem' is not defined
+[23:58:13.376] [+1.087s] [SERVER] [INFO] Starting API server on http://127.0.0.1:3939
