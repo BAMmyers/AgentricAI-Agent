@@ -1,0 +1,7 @@
+{
+  "python_version": "3.9.7",
+  "cuda_version": "11.8",
+  "pytorch_version": "1.13.1+cu118",
+  "numpy_version": "1.21.4",
+  "pandas_version": "1.3.4"
+}

@@ -1,0 +1,54 @@
+import asyncio
+from typing import List, Dict
+
+# Import the Agent class from the AgentricAI core package
+from agentricai.core.agent import Agent
+
+# Define the instructions for the agent
+instructions: str = "You are a helpful assistant."
+
+# Create an instance of the Agent
+test_agent = Agent(
+    id="test-agent",
+    name="Test Agent",
+    instructions=instructions,
+    model="ollama/AgentricAIcody:latest"
+)
+
+# Function to generate a response using the agent
+async def generate_response(messages: List[Dict[str, str]]) -> Dict:
+    response = await test_agent.generate(
+        messages=messages
+    )
+    return response
+
+# Function to stream a response using the agent
+async def stream_response(messages: List[Dict[str, str]]):
+    async for chunk in test_agent.stream(
+            messages=messages
+    ):
+        process.stdout.write(chunk)
+
+# Example usage
+async def main():
+    # Define the user messages
+    user_messages = [
+        {"role": "user", "content": "Help me organize my day"},
+        {"role": "user", "content": "My day starts at 9am and finishes at 5.30pm"},
+        {"role": "user", "content": "I take lunch between 12:30 and 13:30"},
+        {
+            "role": "user",
+            "content": "I have meetings Monday to Friday between 10:30 and 11:30"
+        },
+    ]
+
+    # Generate a response
+    response = await generate_response(user_messages)
+    print("Generated Response:", response.text)
+
+    # Stream the response (optional)
+    # await stream_response(user_messages)
+
+# Run the main function
+if __name__ == "__main__":
+    asyncio.run(main())

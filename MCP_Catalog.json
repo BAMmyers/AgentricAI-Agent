@@ -1,0 +1,120 @@
+{
+  "MCP_Catalog": {
+    "version": "1.0",
+    "description": "AgentricAI Tool Catalog - MCP-compatible tool definitions",
+    "tools": [
+      {
+        "id": "tool123",
+        "name": "DataPreprocessor",
+        "category": "Data Processing",
+        "description": "Preprocesses and transforms input data files",
+        "invocation_contract": {
+          "function_name": "preprocess_data",
+          "parameters": {
+            "input_file_path": {
+              "type": "string",
+              "description": "Path to the input data file",
+              "required": true
+            },
+            "output_file_path": {
+              "type": "string",
+              "description": "Path to save the preprocessed data file",
+              "required": true
+            }
+          }
+        },
+        "environment_bindings": {
+          "relative_path": "Tools/DataPreprocessor",
+          "binary": "data_preprocess.bat",
+          "script": "data_preprocess.py",
+          "execution_mode": "CPU"
+        },
+        "provenance": "Developed by AgentricAI team",
+        "version": "1.0.0",
+        "audit_metadata": {
+          "created_at": "2026-03-06T00:00:00Z",
+          "updated_at": "2026-03-06T00:00:00Z",
+          "author": "AgentricAI Team"
+        }
+      },
+      {
+        "id": "tool456",
+        "name": "GPUAccelerator",
+        "category": "Compute Acceleration",
+        "description": "Accelerates computations using GPU hardware",
+        "invocation_contract": {
+          "function_name": "accelerate_computation",
+          "parameters": {
+            "input_data": {
+              "type": "array",
+              "description": "Input data for computation",
+              "required": true
+            },
+            "output_path": {
+              "type": "string",
+              "description": "Path to save the computed result",
+              "required": true
+            }
+          }
+        },
+        "environment_bindings": {
+          "relative_path": "Tools/GPUAccelerator",
+          "binary": "gpu_accelerate.bat",
+          "script": "gpu_accelerate.py",
+          "execution_mode": "GPU"
+        },
+        "provenance": "Developed by AgentricAI team",
+        "version": "1.0.0",
+        "audit_metadata": {
+          "created_at": "2026-03-06T00:00:00Z",
+          "updated_at": "2026-03-06T00:00:00Z",
+          "author": "AgentricAI Team"
+        }
+      },
+      {
+        "id": "tool789",
+        "name": "MLModelTrainer",
+        "category": "Machine Learning",
+        "description": "Trains machine learning models on provided data",
+        "invocation_contract": {
+          "function_name": "train_model",
+          "parameters": {
+            "input_data_path": {
+              "type": "string",
+              "description": "Path to the training data",
+              "required": true
+            },
+            "model_output_path": {
+              "type": "string",
+              "description": "Path to save the trained model",
+              "required": true
+            },
+            "epochs": {
+              "type": "integer",
+              "description": "Number of training epochs",
+              "default": 10
+            },
+            "batch_size": {
+              "type": "integer",
+              "description": "Batch size for training",
+              "default": 32
+            }
+          }
+        },
+        "environment_bindings": {
+          "relative_path": "Tools/MLModelTrainer",
+          "binary": "ml_train.bat",
+          "script": "ml_train.py",
+          "execution_mode": "Mixed"
+        },
+        "provenance": "Developed by AgentricAI team",
+        "version": "1.0.0",
+        "audit_metadata": {
+          "created_at": "2026-03-06T00:00:00Z",
+          "updated_at": "2026-03-06T00:00:00Z",
+          "author": "AgentricAI Team"
+        }
+      }
+    ]
+  }
+}

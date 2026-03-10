@@ -1,0 +1,67 @@
+{
+  "name": "AgentricAI",
+  "version": "1.0.0",
+  "description": "Sovereign Intelligence Platform - Local-first AI agent ecosystem",
+  "runtime": {
+    "host": "127.0.0.1",
+    "api_port": 3939,
+    "ui_port": 3000,
+    "ollama_url": "http://localhost:11434",
+    "default_model": "lacy:latest",
+    "max_conversation_history": 20,
+    "stream_timeout_seconds": 120,
+    "request_timeout_seconds": 300,
+    "max_memory_entries": 1000,
+    "cleanup_days": 30,
+    "redis_url": "redis://localhost:6379",
+    "deployment_mode": "standalone",
+    "celery_broker_url": "redis://localhost:6379/0",
+    "celery_result_backend": "redis://localhost:6379/1",
+    "enable_gzip": true,
+    "gzip_minimum_size": 1024
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
+    "date_format": "%Y-%m-%d %H:%M:%S",
+    "max_file_size_mb": 10,
+    "backup_count": 5,
+    "console_colors": true
+  },
+  "memory": {
+    "db_path": "memory.db",
+    "conversation_table": "conversation_history",
+    "memory_table": "memory_entries",
+    "enable_persistence": true
+  },
+  "agents": {
+    "default_agent": "lacy",
+    "agents_dir": "core/agents",
+    "auto_discover": true,
+    "model_attribute": "model",
+    "memory_config_attribute": "memory_config"
+  },
+  "tools": {
+    "catalog_path": "MCP_Catalog.json",
+    "tools_dir": "Tools",
+    "validate_paths": true,
+    "execution_timeout": 300,
+    "max_concurrent_executions": 5
+  },
+  "api": {
+  "cors_origins": [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+  ],
+  "enable_auth": false,
+  "rate_limit_requests": 100,
+  "rate_limit_window_seconds": 60
+  },
+  "ui": {
+    "theme": "dark",
+    "enable_animations": true,
+    "max_message_length": 4000,
+    "show_model_selector": true,
+    "show_agent_selector": true
+  }
+}

@@ -1,0 +1,1 @@
+﻿import subprocess def install_package(package_name):     try:         subprocess.check_call(['pip', 'install', package_name])         print(f"{package_name} installed successfully.")     except subprocess.CalledProcessError as e:         print(f"Failed to install {package_name}: {e}")  # Call the function with the package name install_package('sqlite3')

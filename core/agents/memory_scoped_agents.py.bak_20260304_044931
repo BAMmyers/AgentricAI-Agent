@@ -1,0 +1,69 @@
+from agentricai.core.agent import Agent
+from agentricai.memory import Memory
+
+# Create a memory instance for resource-scoped memory
+resource_memory = Memory(
+    options={
+        "workingMemory": {
+            "enabled": True,
+            "scope": "resource",
+            "template": """
+# User Profile
+- **Name**:
+- **Location**:
+- **Interests**:
+- **Preferences**:
+- **Long-term Goals**:
+"""
+        }
+    }
+)
+
+# Create a memory instance for thread-scoped memory
+thread_memory = Memory(
+    options={
+        "workingMemory": {
+            "enabled": True,
+            "scope": "thread",
+            "template": """
+# User Profile
+- **Name**:
+- **Interests**:
+- **Current Goal**:
+"""
+        }
+    }
+)
+
+# Create an agent with resource-scoped memory
+resource_agent = Agent(
+    id="personal-assistant-resource",
+    name="PersonalAssistantResource",
+    instructions="You are a helpful personal assistant.",
+    model="ollama/AgentricAIcody:latest",
+    memory=resource_memory,
+)
+
+# Create an agent with thread-scoped memory
+thread_agent = Agent(
+    id="personal-assistant-thread",
+    name="PersonalAssistantThread",
+    instructions="You are a helpful personal assistant.",
+    model="ollama/AgentricAIcody:latest",
+    memory=thread_memory,
+)
+
+# Example interaction using resource-scoped memory
+resource_response = await resource_agent.generate("Hello!", {
+    "memory": {
+        "thread": "conversation-123",
+        "resource": "user-alice-456",  # Same user across different threads
+    }
+})
+
+# Example interaction using thread-scoped memory
+thread_response = await thread_agent.generate("Hello!", {
+    "memory": {
+        "thread": "conversation-456",
+    }
+})

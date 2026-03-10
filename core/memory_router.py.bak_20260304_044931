@@ -1,0 +1,46 @@
+import os
+import sys
+import inspect
+from importlib.util import spec_from_file_location, module_from_spec
+
+class MemoryRouter:
+    def __init__(self):
+        self.engines = {}
+        self.load_memory_engines()
+
+    def load_memory_engines(self, directory="core/memory"):
+        for root, _, files in os.walk(directory):
+            for file in files:
+                if file.endswith(".py") and not file.startswith("__"):
+                    module_path = os.path.join(root, file)
+                    module_name = module_path.replace("/", ".").replace("\\", ".")
+                    spec = spec_from_file_location(module_name, module_path)
+                    module = module_from_spec(spec)
+                    sys.modules[module_name] = module
+                    spec.loader.exec_module(module)
+
+                    for attr in dir(module):
+                        obj = getattr(module, attr)
+                        if inspect.isclass(obj) and hasattr(obj, "read_memory") and hasattr(obj, "write_memory"):
+                            instance = obj()
+                            self.engines[obj.__name__] = instance
+
+    def _select_engine(self, resource_id=None, thread_id=None):
+        for engine in self.engines.values():
+            if resource_id and hasattr(engine, "supports_resource") and engine.supports_resource(resource_id):
+                return engine
+            if thread_id and hasattr(engine, "supports_thread") and engine.supports_thread(thread_id):
+                return engine
+        return None
+
+    def read_memory(self, resource_id=None, thread_id=None):
+        engine = self._select_engine(resource_id, thread_id)
+        if engine:
+            return engine.read_memory(resource_id=resource_id, thread_id=thread_id)
+        raise ValueError("No memory engine available for the given identifiers")
+
+    def write_memory(self, resource_id=None, thread_id=None, message=None):
+        engine = self._select_engine(resource_id, thread_id)
+        if engine:
+            return engine.write_memory(resource_id=resource_id, thread_id=thread_id, message=message)
+        raise ValueError("No memory engine available for the given identifiers")

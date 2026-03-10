@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  api:
+    build: .
+    ports:
+      - "3939:3939"
+    environment:
+      AGENTRIC_OLLAMA_URL: http://ollama:11434
+      REDIS_URL: redis://redis:6379
+      AGENTRIC_DEPLOYMENT_MODE: "distributed"
+      AGENTRIC_CELERY_BROKER: redis://redis:6379/0
+      AGENTRIC_CELERY_BACKEND: redis://redis:6379/1
+    depends_on:
+      - ollama
+      - redis
+    volumes:
+      - ./logs:/app/logs
+
+  ui:
+    image: agentricai-ui:latest
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://api:3939
+    depends_on:
+      - api
+
+volumes:
+  ollama_data:
+  redis_data:

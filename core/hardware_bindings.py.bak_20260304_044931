@@ -1,0 +1,62 @@
+import os
+import psutil
+from datetime import datetime
+
+# Function to get GPU information
+def get_gpu_info():
+    # Placeholder for actual GPU detection logic using NVIDIA Management Library (NVML)
+    return "NVIDIA RTX 4070 Laptop GPU"
+
+# Function to get CPU information
+def get_cpu_info():
+    cpu = psutil.cpu_freq()
+    return f"AMD Ryzen AI 9 365 • {cpu.current} GHz"
+
+# Function to get RAM information
+def get_ram_info():
+    memory = psutil.virtual_memory()
+    return f"{memory.total / (1024**3):.2f} GB"
+
+# Function to get storage information
+def get_storage_info():
+    disk = psutil.disk_usage('/')
+    return f"{disk.total / (1024**3):.2f} GB"
+
+# Function to bind agents to correct execution modes
+def bind_agent_execution_mode(agent_id, use_gpu=False):
+    if use_gpu:
+        mode = "GPU"
+    elif psutil.cpu_count() > 1:
+        mode = "CPU"
+    else:
+        mode = "Mixed"
+    return f"Agent {agent_id} bound to {mode} execution mode"
+
+# Function to log operations with timestamped audit entries
+def log_operation(agent_id, action, details):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open("audit_log.txt", "a") as file:
+        file.write(f"{timestamp} - Agent {agent_id}: {action} - {details}\n")
+
+# Example usage
+if __name__ == "__main__":
+    # Get hardware information
+    gpu_info = get_gpu_info()
+    cpu_info = get_cpu_info()
+    ram_info = get_ram_info()
+    storage_info = get_storage_info()
+
+    # Print hardware information
+    print(f"GPU Information: {gpu_info}")
+    print(f"CPU Information: {cpu_info}")
+    print(f"RAM Information: {ram_info}")
+    print(f"Storage Information: {storage_info}")
+
+    # Bind an agent to the correct execution mode
+    agent_id = "12345678-1234-1234-1234-1234567890ab"
+    use_gpu = True  # Example: Use GPU for this agent
+    binding_result = bind_agent_execution_mode(agent_id, use_gpu)
+    print(binding_result)
+
+    # Log an operation
+    log_operation(agent_id, "OperationA", "Details about operation A")

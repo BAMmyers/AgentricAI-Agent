@@ -1,0 +1,6 @@
+{
+  "name": "@AgentricAI",
+  "version": "1.0.0",
+  "semantic_lineage": "1.0.0",
+  "description": "The core runtime and tools for AgentricAI."
+}
