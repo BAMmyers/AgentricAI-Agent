@@ -1,0 +1,26 @@
+PS C:\Users\assis\.ollama\models\manifests\registry.ollama.ai> tree
+Folder PATH listing for volume Windows
+Volume serial number is 7270-7139
+C:.
+├───AgentricAi
+│   ├───AgentricAI
+│   ├───AgentricAIcody
+│   ├───AgentricAI_LLaVa
+│   ├───AgentricAI_TLM
+│   └───lacy
+├───blobs
+├───CrimsonDragonX7
+│   └───Luna
+├───library
+│   ├───AgentricAI
+│   ├───AgentricAIcody
+│   ├───deepseek-r1
+│   ├───dolphin-llama3
+│   ├───dolphin-phi
+│   ├───dolphin-uncensored
+│   ├───glm-4.7-flash
+│   ├───lacy
+│   ├───llama2-uncensored
+│   ├───nomic-embed-text
+│   └───qwen2.5-coder
+└───manifests
